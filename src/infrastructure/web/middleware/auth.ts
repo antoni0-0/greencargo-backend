@@ -14,7 +14,7 @@ export function authenticateToken(req: Request, res: Response, next: NextFunctio
     const authHeader = req.headers.authorization;
     const token = extractTokenFromHeader(authHeader);
     const payload = verifyToken(token);
-    
+    console.log('payload', payload);
     req.user = payload;
     next();
   } catch (error) {

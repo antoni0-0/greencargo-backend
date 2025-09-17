@@ -22,13 +22,20 @@
   "homepage": "https://github.com/antoni0-0/greencargo-backend#readme",
   "dependencies": {
     "@types/bcrypt": "^6.0.0",
+    "@types/nodemailer": "^7.0.1",
+    "@types/socket.io": "^3.0.1",
     "bcrypt": "^6.0.0",
     "better-sqlite3": "^12.2.0",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.2",
     "express": "^5.1.0",
-    "jsonwebtoken": "^9.0.2"
+    "jsonwebtoken": "^9.0.2",
+    "nodemailer": "^7.0.6",
+    "socket.io": "^4.8.1"
   },
   "devDependencies": {
     "@types/better-sqlite3": "^7.6.13",
+    "@types/cors": "^2.8.19",
     "@types/express": "^5.0.3",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^24.5.0",

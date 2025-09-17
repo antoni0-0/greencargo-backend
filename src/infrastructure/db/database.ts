@@ -104,4 +104,48 @@ export function initDb() {
     CREATE INDEX IF NOT EXISTS idx_ruta_envio_ruta ON RutaEnvio(id_ruta);
     CREATE INDEX IF NOT EXISTS idx_ruta_envio_transportista ON RutaEnvio(id_transportista);
   `);
+
+  const insertStates = db.prepare(`
+    INSERT OR IGNORE INTO Estado (id, descripcion) VALUES 
+    (0, 'En espera'),
+    (1, 'En tránsito'),
+    (2, 'Entregado')
+  `);
+  insertStates.run();
+
+  const insertVehicles = db.prepare(`
+    INSERT OR IGNORE INTO Vehiculo (id, placa, tipo, capacidad) VALUES 
+    (1, 'ABC-123', 'camion', 5000.0),
+    (2, 'DEF-456', 'furgon', 2000.0),
+    (3, 'GHI-789', 'moto', 50.0),
+    (4, 'JKL-012', 'bicicleta', 20.0)
+  `);
+  insertVehicles.run();
+
+  const insertRoutes = db.prepare(`
+    INSERT OR IGNORE INTO Ruta (id, descripcion, fecha_hora_inicio, estado) VALUES 
+    (1, 'Ruta Norte - Bogotá a Medellín', '2024-01-20 08:00:00', 'planificada'),
+    (2, 'Ruta Sur - Bogotá a Cali', '2024-01-20 10:00:00', 'planificada'),
+    (3, 'Ruta Centro - Bogotá a Bucaramanga', '2024-01-20 14:00:00', 'planificada'),
+    (4, 'Ruta Local - Bogotá Centro', '2024-01-20 16:00:00', 'planificada')
+  `);
+  insertRoutes.run();
+  
+const insertTransportista = db.prepare(`
+  INSERT OR IGNORE INTO Usuario (id, nombre, email, password_hash, rol) VALUES 
+  (4, 'Transportista 1', 'transportista@greencargo.com', '$2b$10$rQZ8K9vL2nF5mH8jP3qWCOY7xK2nF5mH8jP3qWCOY7xK2nF5mH8jP', 'transportista'),
+  (5, 'Transportista 2', 'transportista2@greencargo.com', '$2b$10$rQZ8K9vL2nF5mH8jP3qWCOY7xK2nF5mH8jP3qWCOY7xK2nF5mH8jP', 'transportista'),
+  (6, 'Transportista 3', 'transportista3@greencargo.com', '$2b$10$rQZ8K9vL2nF5mH8jP3qWCOY7xK2nF5mH8jP3qWCOY7xK2nF5mH8jP', 'transportista'),
+  (7, 'Transportista 4', 'transportista4@greencargo.com', '$2b$10$rQZ8K9vL2nF5mH8jP3qWCOY7xK2nF5mH8jP3qWCOY7xK2nF5mH8jP', 'transportista')
+`);
+insertTransportista.run();
+
+  const insertTransportistas = db.prepare(`
+    INSERT OR IGNORE INTO Transportista (id, id_usuario, id_vehiculo, disponibilidad) VALUES 
+    (1, 4, 1, 1),
+    (2, 5, 2, 1),
+    (3, 6, 3, 1),
+    (4, 7, 4, 1)
+  `);
+  insertTransportistas.run();
 }
