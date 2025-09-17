@@ -1,7 +1,7 @@
 export const config = {
   port: process.env.PORT || 3000,
   jwt: {
-    secret: process.env.JWT_SECRET || 'tu-secreto-super-seguro-cambiar-en-produccion',
+    secret: process.env.JWT_SECRET || 'secreto-prueba',
     expiresIn: process.env.JWT_EXPIRES_IN || '10m'
   },
   database: {

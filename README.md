@@ -2,6 +2,21 @@
 
 Backend API para el sistema de gestión de envíos GreenCargo, desarrollado con Node.js, TypeScript y arquitectura hexagonal.
 
+## Videos explicativos
+### Arquitectura de GreenCargo: https://youtu.be/YjwpZgxxSEg
+### Backend de GreenCargo: https://youtu.be/eDXiZPP0iOA
+
+## 🏗️ Diagramas de Arquitectura
+
+### Arquitectura del Sistema
+![Arquitectura del Sistema](docs/architecture-diagram.png)
+
+### Modelo de Base de Datos
+![Modelo de Base de Datos](docs/database-schema.png)
+
+### Casos de Uso
+![Casos de Uso](docs/use-cases-diagram.png)
+
 ## 🚀 Características
 
 - **Arquitectura Hexagonal**: Separación clara entre dominio, aplicación e infraestructura
@@ -48,7 +63,7 @@ Backend API para el sistema de gestión de envíos GreenCargo, desarrollado con 
    DATABASE_PATH=database.sqlite
    
    # JWT
-   JWT_SECRET=tu-secreto-super-seguro-cambiar-en-produccion
+   JWT_SECRET=secreto-prueba
    JWT_EXPIRES_IN=10m
    
    # Email (SMTP)
