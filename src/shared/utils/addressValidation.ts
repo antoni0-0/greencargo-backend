@@ -1,5 +1,5 @@
 export function validateColombianAddress(direccion: string): boolean {
-  const colombianAddressPattern = /^(Calle|Carrera)\s+\d+\s+#\d+-\d+$/i;
+  const colombianAddressPattern = /^(Calle|Carrera|Avenida|Diagonal|Transversal)\s+\d+\s+#\d+-\d+$/i;
   
   return colombianAddressPattern.test(direccion.trim());
 }

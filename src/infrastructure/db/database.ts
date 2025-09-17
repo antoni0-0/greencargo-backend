@@ -1,6 +1,15 @@
 import Database from 'better-sqlite3';
 
+let testDb: Database.Database | null = null;
+
+export function setTestDatabase(db: Database.Database): void {
+  testDb = db;
+}
+
 export function openDb(): Database.Database {
+  if (process.env.NODE_ENV === 'test' && testDb) {
+    return testDb;
+  }
   return new Database('database.sqlite');
 }
 

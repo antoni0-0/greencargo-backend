@@ -47,9 +47,11 @@ app.get('/health', (req, res) => {
 
 const PORT = process.env.PORT || 3000;
 
-server.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-  console.log(`Email queue system initialized`);
-  console.log(`SMTP configured: ${process.env.SMTP_USER ? 'Yes' : 'No'}`);
-  console.log(`WebSocket server initialized`);
-});
+if (process.env.NODE_ENV !== 'test') {
+  server.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+    console.log(`Email queue system initialized`);
+    console.log(`SMTP configured: ${process.env.SMTP_USER ? 'Yes' : 'No'}`);
+    console.log(`WebSocket server initialized`);
+  });
+}

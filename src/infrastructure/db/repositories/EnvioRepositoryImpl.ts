@@ -64,10 +64,13 @@ export class EnvioRepositoryImpl implements EnvioRepository {
         d.departamento,
         d.codigo_postal,
         d.pais,
-        s.descripcion as estado_descripcion
+        s.descripcion as estado_descripcion,
+        u.nombre as usuario_nombre,
+        u.email as usuario_email
       FROM Envio e
       JOIN Direccion d ON e.id_direccion = d.id
       JOIN Estado s ON e.id_estado_actual = s.id
+      JOIN Usuario u ON e.id_usuario = u.id
       WHERE e.id = ?
     `);
     
