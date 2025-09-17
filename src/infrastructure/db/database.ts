@@ -145,7 +145,7 @@ const insertTransportista = db.prepare(`
   (1, 'Transportista 1', 'transportista@greencargo.com', '$2b$10$rQZ8K9vL2nF5mH8jP3qWCOY7xK2nF5mH8jP3qWCOY7xK2nF5mH8jP', 'transportista'),
   (2, 'Transportista 2', 'transportista2@greencargo.com', '$2b$10$rQZ8K9vL2nF5mH8jP3qWCOY7xK2nF5mH8jP3qWCOY7xK2nF5mH8jP', 'transportista'),
   (3, 'Transportista 3', 'transportista3@greencargo.com', '$2b$10$rQZ8K9vL2nF5mH8jP3qWCOY7xK2nF5mH8jP3qWCOY7xK2nF5mH8jP', 'transportista'),
-  (5, 'Transportista 4', 'transportista4@greencargo.com', '$2b$10$rQZ8K9vL2nF5mH8jP3qWCOY7xK2nF5mH8jP3qWCOY7xK2nF5mH8jP', 'transportista')
+  (4, 'Transportista 4', 'transportista4@greencargo.com', '$2b$10$rQZ8K9vL2nF5mH8jP3qWCOY7xK2nF5mH8jP3qWCOY7xK2nF5mH8jP', 'transportista')
 `);
 insertTransportista.run();
 
