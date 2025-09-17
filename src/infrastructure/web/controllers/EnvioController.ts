@@ -135,9 +135,62 @@ export class EnvioController {
     }
   }
 
-  async updateStatus(req: Request, res: Response): Promise<void> {
+  async updateEnvioStatus(envioId: number, nuevoEstado: number): Promise<any> {
     try {
       const envioRepository = new EnvioRepositoryImpl();
+      
+      const envioActual = await envioRepository.findById(envioId);
+      if (!envioActual) {
+        throw new Error('Envío no encontrado');
+      }
+
+      if (envioActual.id_estado_actual === nuevoEstado) {
+        throw new Error('El envío ya tiene este estado');
+      }
+
+      const actualizado = await envioRepository.updateEstado(envioId, nuevoEstado);
+      
+      if (!actualizado) {
+        throw new Error('Error al actualizar el estado del envío');
+      }
+
+      const estadoNames = ['En espera', 'En tránsito', 'Entregado'];
+      const descripcionAnterior = estadoNames[envioActual.id_estado_actual] || 'Desconocido';
+      const descripcionNueva = estadoNames[nuevoEstado] || 'Desconocido';
+      const comentario = `Cambio de estado: ${descripcionAnterior} → ${descripcionNueva}`;
+      
+      await envioRepository.saveEstadoEnvio(envioId, nuevoEstado, comentario);
+
+      const envioActualizado = await envioRepository.findById(envioId);
+      
+      const update = {
+        envioId: envioId,
+        usuarioId: envioActual.id_usuario,
+        estadoAnterior: {
+          id: envioActual.id_estado_actual,
+          descripcion: descripcionAnterior
+        },
+        estadoNuevo: {
+          id: nuevoEstado,
+          descripcion: descripcionNueva
+        },
+        fechaActualizacion: new Date().toISOString(),
+        mensaje: `El envío ha cambiado de "${descripcionAnterior}" a "${descripcionNueva}"`
+      };
+
+      this.webSocketService.broadcastEnvioStatusUpdate(update);
+
+      return {
+        envio: envioActualizado,
+        update
+      };
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async updateStatus(req: Request, res: Response): Promise<void> {
+    try {
       const { id } = req.params;
       const { estado } = req.body;
       
@@ -158,73 +211,40 @@ export class EnvioController {
       }
 
       const envioId = parseInt(id);
-      
-      const envioActual = await envioRepository.findById(envioId);
-      if (!envioActual) {
-        res.status(404).json({
-          success: false,
-          message: 'Envío no encontrado'
-        });
-        return;
-      }
-
-      if (envioActual.id_estado_actual === estado) {
-        res.status(400).json({
-          success: false,
-          message: 'El envío ya tiene este estado'
-        });
-        return;
-      }
-
-      const actualizado = await envioRepository.updateEstado(envioId, estado);
-      
-      if (!actualizado) {
-        res.status(500).json({
-          success: false,
-          message: 'Error al actualizar el estado del envío'
-        });
-        return;
-      }
-
-      const estadoNames = ['En espera', 'En tránsito', 'Entregado'];
-      const descripcionAnterior = estadoNames[envioActual.id_estado_actual] || 'Desconocido';
-      const descripcionNueva = estadoNames[estado] || 'Desconocido';
-      const comentario = `Cambio de estado: ${descripcionAnterior} → ${descripcionNueva}`;
-      
-      await envioRepository.saveEstadoEnvio(envioId, estado, comentario);
-
-      const envioActualizado = await envioRepository.findById(envioId);
-      
-      const update = {
-        envioId: envioId,
-        usuarioId: envioActual.id_usuario,
-        estadoAnterior: {
-          id: envioActual.id_estado_actual,
-          descripcion: descripcionAnterior
-        },
-        estadoNuevo: {
-          id: estado,
-          descripcion: descripcionNueva
-        },
-        fechaActualizacion: new Date().toISOString(),
-        mensaje: `El envío ha cambiado de "${descripcionAnterior}" a "${descripcionNueva}"`
-      };
-
-      this.webSocketService.broadcastEnvioStatusUpdate(update);
+      const result = await this.updateEnvioStatus(envioId, estado);
 
       res.status(200).json({
         success: true,
         message: 'Estado del envío actualizado exitosamente',
-        data: envioActualizado,
-        update
+        data: result.envio,
+        update: result.update
       });
     } catch (error) {
       console.error('Error updating shipment status:', error);
       
-      res.status(500).json({
-        success: false,
-        message: 'Error interno del servidor'
-      });
+      if (error instanceof Error) {
+        if (error.message === 'Envío no encontrado') {
+          res.status(404).json({
+            success: false,
+            message: error.message
+          });
+        } else if (error.message === 'El envío ya tiene este estado') {
+          res.status(400).json({
+            success: false,
+            message: error.message
+          });
+        } else {
+          res.status(500).json({
+            success: false,
+            message: 'Error interno del servidor'
+          });
+        }
+      } else {
+        res.status(500).json({
+          success: false,
+          message: 'Error interno del servidor'
+        });
+      }
     }
   }
 

@@ -9,6 +9,7 @@ import createRutaRoutes from './routes/rutaRoutes';
 import { QueueService } from '../queue/QueueService';
 import { EmailProcessor } from '../queue/processors/EmailProcessor';
 import { WebSocketService } from '../websocket/WebSocketService';
+import { EnvioController } from './controllers/EnvioController';
 
 const app = express();
 const server = createServer(app);
@@ -30,9 +31,11 @@ queueService.registerProcessor('email', emailProcessor);
 
 const webSocketService = new WebSocketService(server);
 
+const envioController = new EnvioController(queueService, webSocketService);
+
 app.use('/api/usuarios', usuarioRoutes);
 app.use('/api/envios', createEnvioRoutes(queueService, webSocketService));
-app.use('/api/rutas', createRutaRoutes());
+app.use('/api/rutas', createRutaRoutes(envioController));
 
 app.get('/health', (req, res) => {
   res.json({ 

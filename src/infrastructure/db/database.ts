@@ -142,19 +142,19 @@ export function initDb() {
   
 const insertTransportista = db.prepare(`
   INSERT OR IGNORE INTO Usuario (id, nombre, email, password_hash, rol) VALUES 
-  (4, 'Transportista 1', 'transportista@greencargo.com', '$2b$10$rQZ8K9vL2nF5mH8jP3qWCOY7xK2nF5mH8jP3qWCOY7xK2nF5mH8jP', 'transportista'),
-  (5, 'Transportista 2', 'transportista2@greencargo.com', '$2b$10$rQZ8K9vL2nF5mH8jP3qWCOY7xK2nF5mH8jP3qWCOY7xK2nF5mH8jP', 'transportista'),
-  (6, 'Transportista 3', 'transportista3@greencargo.com', '$2b$10$rQZ8K9vL2nF5mH8jP3qWCOY7xK2nF5mH8jP3qWCOY7xK2nF5mH8jP', 'transportista'),
-  (7, 'Transportista 4', 'transportista4@greencargo.com', '$2b$10$rQZ8K9vL2nF5mH8jP3qWCOY7xK2nF5mH8jP3qWCOY7xK2nF5mH8jP', 'transportista')
+  (1, 'Transportista 1', 'transportista@greencargo.com', '$2b$10$rQZ8K9vL2nF5mH8jP3qWCOY7xK2nF5mH8jP3qWCOY7xK2nF5mH8jP', 'transportista'),
+  (2, 'Transportista 2', 'transportista2@greencargo.com', '$2b$10$rQZ8K9vL2nF5mH8jP3qWCOY7xK2nF5mH8jP3qWCOY7xK2nF5mH8jP', 'transportista'),
+  (3, 'Transportista 3', 'transportista3@greencargo.com', '$2b$10$rQZ8K9vL2nF5mH8jP3qWCOY7xK2nF5mH8jP3qWCOY7xK2nF5mH8jP', 'transportista'),
+  (5, 'Transportista 4', 'transportista4@greencargo.com', '$2b$10$rQZ8K9vL2nF5mH8jP3qWCOY7xK2nF5mH8jP3qWCOY7xK2nF5mH8jP', 'transportista')
 `);
 insertTransportista.run();
 
   const insertTransportistas = db.prepare(`
     INSERT OR IGNORE INTO Transportista (id, id_usuario, id_vehiculo, disponibilidad) VALUES 
-    (1, 4, 1, 1),
-    (2, 5, 2, 1),
-    (3, 6, 3, 1),
-    (4, 7, 4, 1)
+    (1, 1, 1, 1),
+    (2, 2, 2, 1),
+    (3, 3, 3, 1),
+    (4, 4, 4, 1)
   `);
   insertTransportistas.run();
 }

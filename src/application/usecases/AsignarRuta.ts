@@ -43,8 +43,6 @@ export class AsignarRuta {
       id_transportista: request.id_transportista
     });
 
-    await this.envioRepository.updateEstado(request.id_envio, 1);
-
     const rutaEnvioResponse = await this.rutaEnvioRepository.findById(rutaEnvio.id!);
     if (!rutaEnvioResponse) {
       throw new Error('Error al obtener la información de la asignación creada');

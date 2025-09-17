@@ -1,10 +1,11 @@
 import { Router } from 'express';
 import { RutaController } from '../controllers/RutaController';
+import { EnvioController } from '../controllers/EnvioController';
 import { authenticateToken, requireRole } from '../middleware/auth';
 
-export default function createRutaRoutes() {
+export default function createRutaRoutes(envioController: EnvioController) {
   const router = Router();
-  const rutaController = new RutaController();
+  const rutaController = new RutaController(envioController);
 
   router.use(authenticateToken);
 

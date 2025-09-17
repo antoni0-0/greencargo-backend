@@ -3,17 +3,20 @@ import { AsignarRuta } from '../../../application/usecases/AsignarRuta';
 import { RutaEnvioRepositoryImpl } from '../../db/repositories/RutaEnvioRepositoryImpl';
 import { EnvioRepositoryImpl } from '../../db/repositories/EnvioRepositoryImpl';
 import { AsignarRutaRequest } from '../../../domain/entities/AsignarRuta';
+import { EnvioController } from './EnvioController';
 
 export class RutaController {
   private asignarRuta: AsignarRuta;
   private rutaEnvioRepository: RutaEnvioRepositoryImpl;
+  private envioController: EnvioController;
 
-  constructor() {
+  constructor(envioController: EnvioController) {
     const rutaEnvioRepository = new RutaEnvioRepositoryImpl();
     const envioRepository = new EnvioRepositoryImpl();
     
     this.asignarRuta = new AsignarRuta(rutaEnvioRepository, envioRepository);
     this.rutaEnvioRepository = rutaEnvioRepository;
+    this.envioController = envioController;
   }
 
   async asignar(req: Request, res: Response): Promise<void> {
@@ -27,11 +30,16 @@ export class RutaController {
       };
 
       const asignacion = await this.asignarRuta.execute(request);
+      
+      const statusUpdate = await this.envioController.updateEnvioStatus(id_envio, 1);
 
       res.status(201).json({
         success: true,
-        message: 'Ruta asignada exitosamente al envío',
-        data: asignacion
+        message: 'Ruta asignada exitosamente al envío y estado actualizado',
+        data: {
+          asignacion,
+          statusUpdate: statusUpdate.update
+        }
       });
     } catch (error) {
       console.error('Error assigning route:', error);
